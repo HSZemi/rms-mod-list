@@ -18,7 +18,7 @@
                 <img src="img/SiegeEngineers.png" alt="Siege Engineers"/> Map Mods
             </h1>
             <p class="subtitle">
-                Age of Empires II DE map mods list – Last Update: <span id="last-update">…</span>
+                Age of Empires II DE map mods list – <span id="mapcount">…</span> Mods Total – Last Update: <span id="last-update">…</span>
             </p>
         </div>
     </div>
@@ -65,6 +65,7 @@
                     units_buildings_content.appendChild(node);
                 }
                 document.getElementById('last-update').innerText = json.lastUpdate;
+                document.getElementById('mapcount').innerText = json.modList.length;
                 applyFilter();
             });
     };
