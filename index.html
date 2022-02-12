@@ -15,7 +15,7 @@
     <div class="hero-body">
         <div class="container">
             <h1 class="title is-2">
-                <img src="img/SiegeEngineers.png" alt="Siege Engineers"/> Map Mods
+                <img src="img/SiegeEngineers.png" alt="Siege Engineers"/> <a href="/" onclick="applyIDFilter();return false;">Map Mods</a>
             </h1>
             <p class="subtitle">
                 Age of Empires II DE map mods list – <span id="mapcount">…</span> Mods Total – Last Update: <span id="last-update">…</span>
@@ -25,6 +25,19 @@
 </section>
 <section class="section">
     <div class="container content">
+        <article class="message is-danger is-hidden" id="not-found-alert">
+            <div class="message-header">
+                <p>Not found</p>
+            </div>
+            <div class="message-body">
+                There currently is no known map mod with id <span id="map-mod-id">…</span>.
+            </div>
+        </article>
+        <article class="message is-info is-hidden" id="single-mod-alert">
+            <div class="message-body">
+                You are viewing a single map mod. <a href="/" onclick="applyIDFilter();return false;">Show all map mods</a>
+            </div>
+        </article>
         <div class="columns">
             <div class="column ">
                 <input class="input is-rounded" type="text" id="filter" placeholder="Filter...">
@@ -50,6 +63,43 @@
         }
     };
 
+    const applyIDFilter = (id) => {
+        const modElements = document.getElementsByClassName('mods');
+        document.getElementById('not-found-alert').classList.add('is-hidden');
+        document.getElementById('single-mod-alert').classList.add('is-hidden');
+        if (!id){
+            for (let singleMod of modElements) {
+                singleMod.classList.remove('is-hidden');
+            }
+            const title = 'Map Mods | Siege Engineers';
+            window.history.pushState({}, title, window.location.protocol + '//' + window.location.host);
+            document.title = title;
+        } else {
+            const elementToShow = document.getElementById('mod-' + id);
+            if (elementToShow){
+                for (let singleMod of modElements) {
+                    singleMod.classList.add('is-hidden');
+                }
+                elementToShow.classList.remove('is-hidden');
+                const title = 'Map Mod ' + id + ' | Siege Engineers';
+                window.history.pushState({}, title, window.location.protocol + '//' + window.location.host + '/' + id);
+                document.title = title;
+                document.getElementById('single-mod-alert').classList.remove('is-hidden');
+            } else {
+                document.getElementById('map-mod-id').innerText = id;
+                document.getElementById('not-found-alert').classList.remove('is-hidden');
+            }
+        }
+    };
+    
+    const getSingleModId = () => {
+        if (window.location.pathname === '/'){
+            return null;
+        }
+        const items = window.location.pathname.split('/');
+        return parseInt(items[1]);
+    }
+
     const init = (filename) => {
         fetch(filename)
             .then(response => response.json())
@@ -67,6 +117,10 @@
                 document.getElementById('last-update').innerText = json.lastUpdate;
                 document.getElementById('mapcount').innerText = json.modList.length;
                 applyFilter();
+                const singleModId = getSingleModId();
+                if(singleModId){
+                    applyIDFilter(singleModId);
+                }
             });
     };
 
@@ -80,7 +134,7 @@
                 </figure>
             </div>
             <div class="column">
-                <h3 class="title is-4">${mod.modName}</h3>
+                <h3 class="title is-4"><a href="/${mod.modId}" onclick="applyIDFilter(${mod.modId});return false;">${mod.modName}</a></h3>
                 <h4 class="title is-6">by ${mod.creatorName} <img loading="lazy" class="image is-24x24 avatar" src="${mod.creatorAvatarUrl}"/></h4>
                 <p>${mod.modDescription}</p>
             </div>
@@ -113,10 +167,10 @@
 <footer class="footer">
     <div class="container content has-text-grey-light is-size-7">
         <p>Made by <a href="https://aoe2.se" rel="author" class="has-text-grey">Siege Engineers</a>. You can contribute
-            to this project on <a href="https://github.com/SiegeEngineers/halfon" rel="nofollow" class="has-text-grey">GitHub</a>.
+            to this project on <a href="https://github.com/SiegeEngineers/rms-mod-list" rel="nofollow" class="has-text-grey">GitHub</a>.
         </p>
         <p>Age of Empires II &copy; Microsoft Corporation.<br/>
-            <b>Halfon</b> was created under Microsoft's "<a href="https://www.xbox.com/en-us/developers/rules"
+            <b>Map Mods</b> was created under Microsoft's "<a href="https://www.xbox.com/en-us/developers/rules"
                                                             rel="nofollow" class="has-text-grey">Game Content Usage
                 Rules</a>" using assets from Age of Empires II, and it is not endorsed by or affiliated with Microsoft.
         </p>
