@@ -125,6 +125,10 @@
     };
 
     const modToDiv = (mod) => {
+        let downloadLink = `<a href="${mod.downloadUrl}" class="card-footer-item">Download (${(mod.modFileSize / 1024 / 1024).toFixed(2)} MiB)</a>`;
+        if (mod.downloadUrl.startsWith('#')){
+            downloadLink = `<span title="Sorry, could not get download URL" class="card-footer-item">Download (${(mod.modFileSize / 1024 / 1024).toFixed(2)} MiB)</span>`;
+        }
         return `<div class="card">
     <div class="card-content">
         <div class="columns">
@@ -141,7 +145,7 @@
         </div>
     </div>
     <footer class="card-footer">
-        <a href="${mod.downloadUrl}" class="card-footer-item">Download (${(mod.modFileSize / 1024 / 1024).toFixed(2)} MiB)</a>
+        ${downloadLink}
         <a href="https://www.ageofempires.com/mods/details/${mod.modId}/" class="card-footer-item">View on
             ageofempires.com</a>
         <p class="card-footer-item">
