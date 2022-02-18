@@ -2,6 +2,7 @@
 	import Header from "./Header.svelte";
 	import PageContent from "./PageContent.svelte";
 	import Footer from "./Footer.svelte";
+	import LoadingProgress from "./LoadingProgress.svelte";
 
 
 	const getSingleModId = () => {
@@ -33,6 +34,10 @@
 
 <main>
 	<Header {lastUpdate} {modCount} bind:singleModId/>
-	<PageContent {modList} bind:singleModId/>
+	{#if modList}
+		<PageContent {modList} bind:singleModId/>
+	{:else}
+		<LoadingProgress/>
+	{/if}
 	<Footer/>
 </main>

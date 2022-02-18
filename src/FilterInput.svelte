@@ -1,10 +1,19 @@
 <script lang="ts">
     export let filter = '';
-
+    export let filteredCount = 0;
 </script>
 
 <div class="columns">
-    <div class="column ">
-        <input class="input is-rounded" type="text" id="filter" placeholder="Filter..." bind:value={filter}>
+    <div class="column">
+        <div class="field has-addons">
+            <p class="control">
+                <span class="button is-static is-rounded">
+                    {filteredCount}
+                </span>
+            </p>
+            <p class="control is-flex-grow-1">
+                <input class="input is-rounded" type="text" id="filter" placeholder="Filter..." bind:value={filter}>
+            </p>
+        </div>
     </div>
 </div>
