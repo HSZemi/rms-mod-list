@@ -1,2 +1,4 @@
-.idea
-data/all_the_maps.json
+/node_modules/
+/public/build/
+/public/data/all_the_maps.json
+.DS_Store
