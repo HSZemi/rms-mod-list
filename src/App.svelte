@@ -3,10 +3,12 @@
 	import PageContent from "./PageContent.svelte";
 	import Footer from "./Footer.svelte";
 	import LoadingProgress from "./LoadingProgress.svelte";
+	import {resetTitleAndUrl, updateTitleAndUrl} from "./helpers";
+	import {mod} from "./Mod.svelte";
 
 
 	const getSingleModId = () => {
-		if (window.location.pathname === '/'){
+		if (window.location.pathname === '/') {
 			return null;
 		}
 		const items = window.location.pathname.split('/');
@@ -16,7 +18,13 @@
 	let lastUpdate: number;
 	let modCount: number;
 	let modList;
-	let singleModId: number|null = getSingleModId();
+	let singleModId: number | null = getSingleModId();
+	$: if (singleModId) {
+		updateTitleAndUrl(singleModId);
+	} else {
+		resetTitleAndUrl();
+	}
+
 
 	const init = (filename) => {
 		fetch(filename)

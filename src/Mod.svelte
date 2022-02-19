@@ -5,7 +5,9 @@
     export let mod: IMod;
     export let singleModId: number|null;
 
-    const clickHandler = () => {singleModId = mod.modId}
+    const clickHandler = () => {
+        singleModId = mod.modId;
+    }
 </script>
 
 <div class="card">
