@@ -6,11 +6,9 @@
 	import {resetTitleAndUrl, updateTitleAndUrl} from "./helpers";
 	import {onDestroy} from "svelte";
 	import {singleModId} from "./stores";
+	import LoadingError from "./LoadingError.svelte";
 
 
-	let lastUpdate: number;
-	let modCount: number;
-	let modList;
 	const unsubscribe = singleModId.subscribe(value => {
 		if (value) {
 			updateTitleAndUrl(value);
@@ -22,26 +20,32 @@
 	onDestroy(unsubscribe);
 
 
-	const init = (filename) => {
-		fetch(filename)
-				.then(response => response.json())
-				.then(json => {
-					modList = json.modList;
-					lastUpdate = json.lastUpdate;
-					modCount = json.modList.length;
-				});
+	const init = async (filename) => {
+		const response = await fetch(filename);
+		const json = await response.json();
+
+		if (response.ok) {
+			let modList = json.modList;
+			let lastUpdate = json.lastUpdate;
+			let modCount = json.modList.length
+			return {modList, lastUpdate, modCount};
+		} else {
+			throw new Error("Fetching mods failed");
+		}
 	};
 
-	init("/data/all_the_maps.json");
+	let promise: Promise<{ modList, lastUpdate, modCount }> = init("/data/all_the_maps.json");
 
 </script>
 
 <main>
-	<Header {lastUpdate} {modCount}/>
-	{#if modList}
-		<PageContent {modList}/>
-	{:else}
+	<Header {promise}/>
+	{#await promise}
 		<LoadingProgress/>
-	{/if}
+	{:then resolved}
+		<PageContent modList={resolved.modList}/>
+	{:catch error}
+		<LoadingError/>
+	{/await}
 	<Footer/>
 </main>

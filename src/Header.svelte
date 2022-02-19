@@ -1,8 +1,7 @@
 <script lang="ts">
     import {singleModId} from "./stores";
 
-    export let modCount = '…';
-    export let lastUpdate = '…';
+    export let promise: Promise<{modList, lastUpdate, modCount}>;
 
     const clickHandler = () => {
         singleModId.set(null);
@@ -17,7 +16,12 @@
                 <a href="/" on:click|preventDefault={clickHandler}>Map Mods</a>
             </h1>
             <p class="subtitle">
-                Age of Empires II DE map mods list – {modCount} Mods Total – Last Update: {lastUpdate}
+                {#await promise}
+                    Age of Empires II DE map mods list – … Mods Total – Last Update: …
+                {:then resolved}
+                    Age of Empires II DE map mods list – {resolved.modCount} Mods Total – Last
+                    Update: {resolved.lastUpdate}
+                {/await}
             </p>
         </div>
     </div>
