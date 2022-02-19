@@ -9,3 +9,11 @@ export const updateTitleAndUrl = (modId: number) => {
     window.history.pushState({}, title, window.location.protocol + '//' + window.location.host + '/' + modId);
     document.title = title;
 }
+
+export const getSingleModId = () => {
+    if (window.location.pathname === '/') {
+        return null;
+    }
+    const items = window.location.pathname.split('/');
+    return parseInt(items[1]);
+}

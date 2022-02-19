@@ -1,10 +1,11 @@
 <script lang="ts">
+    import {singleModId} from "./stores";
+
     export let modCount = '…';
     export let lastUpdate = '…';
-    export let singleModId;
 
     const clickHandler = () => {
-        singleModId = null;
+        singleModId.set(null);
     }
 </script>
 

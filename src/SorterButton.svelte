@@ -1,22 +1,22 @@
 <script lang="ts">
-    export let method: string = '';
+    import {sortDirection, sortMethod} from "./stores";
+
     export let label: string = '';
-    export let direction: string = '';
-    $: selected = (label.toLowerCase() === method);
+    $: selected = (label.toLowerCase() === $sortMethod);
 
     const callback = () => {
         if(selected){
-            direction = direction === 'ASC' ? 'DESC' : 'ASC';
+            sortDirection.update(direction => (direction === 'ASC' ? 'DESC' : 'ASC'));
         } else {
-            direction = 'DESC';
-            method = label.toLowerCase();
+            sortDirection.set('DESC');
+            sortMethod.set(label.toLowerCase());
         }
     }
 </script>
 
 {#if selected}
     <button class="button is-primary is-selected" on:click={callback}>
-        {label} <span class="tag is-white is-rounded">{direction}</span>
+        {label} <span class="tag is-white is-rounded">{$sortDirection}</span>
     </button>
 {:else}
     <button class="button" on:click={callback}>

@@ -1,5 +1,6 @@
 <script lang="ts">
-    export let filter = '';
+    import {filter} from "./stores";
+
     export let filteredCount = 0;
 </script>
 
@@ -10,6 +11,6 @@
                 </span>
     </p>
     <p class="control is-flex-grow-1">
-        <input class="input is-rounded" type="text" id="filter" placeholder="Filter..." bind:value={filter}>
+        <input class="input is-rounded" type="text" id="filter" placeholder="Filter..." bind:value={$filter}>
     </p>
 </div>

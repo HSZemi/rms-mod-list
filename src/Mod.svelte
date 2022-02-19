@@ -1,12 +1,12 @@
 <script lang="ts">
     import DownloadLink from "./DownloadLink.svelte";
     import type {IMod} from "./Interfaces";
+    import {singleModId} from "./stores";
 
     export let mod: IMod;
-    export let singleModId: number|null;
 
     const clickHandler = () => {
-        singleModId = mod.modId;
+        singleModId.set(mod.modId);
     }
 </script>
 

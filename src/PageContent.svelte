@@ -5,6 +5,7 @@
     import SingleMod from "./SingleMod.svelte";
     import type {IMod} from "./Interfaces";
     import Sorter from "./Sorter.svelte";
+    import {filter, singleModId, sortDirection, sortMethod} from "./stores";
 
     const sort = (list: IMod[], method: string, direction: string) => {
         let key = 'createDate';
@@ -36,31 +37,26 @@
         }
     }
 
-    let filter = '';
-    export let singleModId: number | null;
     export let modList: IMod[];
-    $: filteredModList = filtered(modList, filter);
-
-    let method: string = 'created';
-    let direction: string = 'DESC';
-    $: sortedModList = sort(filteredModList, method, direction);
+    $: filteredModList = filtered(modList, $filter);
+    $: sortedModList = sort(filteredModList, $sortMethod, $sortDirection);
 </script>
 
 <section class="section">
     <div class="container">
-        <Messages {modList} bind:singleModId/>
-        {#if singleModId}
-            <SingleMod {modList} bind:singleModId/>
+        <Messages {modList}/>
+        {#if $singleModId}
+            <SingleMod {modList}/>
         {:else}
             <div class="columns is-desktop">
                 <div class="column is-three-fifths-widescreen">
-                    <FilterInput filteredCount={sortedModList.length} bind:filter/>
+                    <FilterInput filteredCount={sortedModList.length}/>
                 </div>
                 <div class="column">
-                    <Sorter bind:method bind:direction/>
+                    <Sorter/>
                 </div>
             </div>
-            <ModList modList={sortedModList} bind:singleModId/>
+            <ModList modList={sortedModList}/>
         {/if}
     </div>
 </section>

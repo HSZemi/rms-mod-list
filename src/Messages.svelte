@@ -1,5 +1,6 @@
 <script lang="ts">
     import type {IMod} from "./Interfaces";
+    import {singleModId} from "./stores";
 
     const calculateNotFound = (list: IMod[] | undefined, id: number | null) => {
         if (!list) {
@@ -8,14 +9,13 @@
         if (id === null) {
             return false;
         }
-        return list.filter(mod => mod.modId === singleModId).length === 0;
+        return list.filter(mod => mod.modId === $singleModId).length === 0;
     }
-    export let singleModId: number | null = null;
     export let modList: IMod[];
-    $: modNotFound = calculateNotFound(modList, singleModId);
+    $: modNotFound = calculateNotFound(modList, $singleModId);
 
     const clickHandler = () => {
-        singleModId = null;
+        singleModId.set(null);
     }
 </script>
 
@@ -25,10 +25,10 @@
             <p>Not found</p>
         </div>
         <div class="message-body">
-            There currently is no known map mod with id {singleModId}.
+            There currently is no known map mod with id {$singleModId}.
         </div>
     </article>
-{:else if singleModId}
+{:else if $singleModId}
     <article class="message is-info" id="single-mod-alert">
         <div class="message-body">
             You are viewing a single map mod. <a href="/" on:click|preventDefault={clickHandler}>Show all map mods</a>

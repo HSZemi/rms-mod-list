@@ -4,26 +4,22 @@
 	import Footer from "./Footer.svelte";
 	import LoadingProgress from "./LoadingProgress.svelte";
 	import {resetTitleAndUrl, updateTitleAndUrl} from "./helpers";
-	import {mod} from "./Mod.svelte";
+	import {onDestroy} from "svelte";
+	import {singleModId} from "./stores";
 
-
-	const getSingleModId = () => {
-		if (window.location.pathname === '/') {
-			return null;
-		}
-		const items = window.location.pathname.split('/');
-		return parseInt(items[1]);
-	}
 
 	let lastUpdate: number;
 	let modCount: number;
 	let modList;
-	let singleModId: number | null = getSingleModId();
-	$: if (singleModId) {
-		updateTitleAndUrl(singleModId);
-	} else {
-		resetTitleAndUrl();
-	}
+	const unsubscribe = singleModId.subscribe(value => {
+		if (value) {
+			updateTitleAndUrl(value);
+		} else {
+			resetTitleAndUrl();
+		}
+	});
+
+	onDestroy(unsubscribe);
 
 
 	const init = (filename) => {
@@ -41,9 +37,9 @@
 </script>
 
 <main>
-	<Header {lastUpdate} {modCount} bind:singleModId/>
+	<Header {lastUpdate} {modCount}/>
 	{#if modList}
-		<PageContent {modList} bind:singleModId/>
+		<PageContent {modList}/>
 	{:else}
 		<LoadingProgress/>
 	{/if}
