@@ -4,7 +4,6 @@
     import type {IMod} from "./Interfaces";
 
     export let singleModId: number|null;
-    export let filter = '';
     export let modList: IMod[];
     $: filteredModList = modList ? modList.filter(mod => mod.modId === singleModId) : [];
 </script>
