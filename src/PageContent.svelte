@@ -25,10 +25,21 @@
         return list.sort((a: IMod, b: IMod) => a[key] > b[key] ? trueValue : falseValue);
     }
 
+    const filtered = (list: IMod[], filter: string) => {
+        if (list) {
+            return list.filter(mod => {
+                const contentString = mod.modName + '|' + mod.creatorName + '|' + mod.modDescription;
+                return contentString.toLowerCase().indexOf(filter.toLowerCase()) > -1
+            });
+        } else {
+            return [];
+        }
+    }
+
     let filter = '';
     export let singleModId: number | null;
     export let modList: IMod[];
-    $: filteredModList = modList ? modList.filter(mod => (mod.modName + '|' + mod.modDescription).toLowerCase().indexOf(filter.toLowerCase()) > -1) : [];
+    $: filteredModList = filtered(modList, filter);
 
     let method: string = 'created';
     let direction: string = 'DESC';
