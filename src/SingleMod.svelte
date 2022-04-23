@@ -10,7 +10,7 @@
 
 {#if modList}
     {#each filteredModList as mod (mod.modId)}
-        <Mod {mod}/>
+        <Mod short={false} {mod}/>
     {/each}
 {:else}
     <LoadingProgress/>
